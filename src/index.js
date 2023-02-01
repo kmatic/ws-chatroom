@@ -1,16 +1,16 @@
-const express = require("express");
-const { createServer } = require("http");
-const { Server } = require("socket.io");
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
 
-const app = express();
-const httpServer = createServer(app);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 
-const io = new Server(httpServer);
+// const socket = io(`ws://localhost:5000`);
 
-io.on("connect", (socket) => {
-  console.log("user connected", socket.id);
-});
-
-app.use(express.static("public"));
-
-httpServer.listen(5000);
+// socket.on("connect", () => {
+//   console.log("connected");
+// });
