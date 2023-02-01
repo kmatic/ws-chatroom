@@ -27151,8 +27151,8 @@ var _socketIoClient = require("socket.io-client");
 var _styledComponents = require("styled-components");
 var _styledComponentsDefault = parcelHelpers.interopDefault(_styledComponents);
 var _s = $RefreshSig$();
+const username = prompt("What is your username");
 const socket = (0, _socketIoClient.io)("ws://localhost:5000");
-// const username = prompt("What is your username");
 const StyledDiv = (0, _styledComponentsDefault.default).div`
   display: flex;
   align-items: center;
@@ -27192,18 +27192,28 @@ const UserBox = (0, _styledComponentsDefault.default).div`
 _c2 = UserBox;
 const Messages = (0, _styledComponentsDefault.default).div`
   background-color: lightgrey;
-  width: 100%;
+  width: 100%;bob
+
   height: 400px;
 `;
 _c3 = Messages;
 const App = ()=>{
     _s();
-    [messages, SetMessages] = (0, _react.useState)([]);
-    [message, setMessage] = (0, _react.useState)("");
-    [users, setUsers] = (0, _react.useState)([]);
+    const [messages, SetMessages] = (0, _react.useState)([]);
+    const [message, setMessage] = (0, _react.useState)("");
+    const [users, setUsers] = (0, _react.useState)([]);
     (0, _react.useEffect)(()=>{
         socket.on("connect", ()=>{
             console.log("connected", socket.id);
+            socket.emit("username-provided", username);
+        });
+        socket.on("connected", (users)=>{
+            setUsers(users);
+        });
+        socket.on("disconnected", (id)=>{
+            setUsers((users)=>{
+                return users.filter((user)=>user.id !== id);
+            });
         });
     }, []);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(StyledDiv, {
@@ -27215,12 +27225,12 @@ const App = ()=>{
                             children: "Messages"
                         }, void 0, false, {
                             fileName: "src/App.js",
-                            lineNumber: 68,
+                            lineNumber: 80,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(Messages, {}, void 0, false, {
                             fileName: "src/App.js",
-                            lineNumber: 69,
+                            lineNumber: 81,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
@@ -27231,26 +27241,26 @@ const App = ()=>{
                                     onChange: (e)=>setMessage(e.target.value)
                                 }, void 0, false, {
                                     fileName: "src/App.js",
-                                    lineNumber: 71,
+                                    lineNumber: 83,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
                                     children: "Send"
                                 }, void 0, false, {
                                     fileName: "src/App.js",
-                                    lineNumber: 76,
+                                    lineNumber: 88,
                                     columnNumber: 13
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "src/App.js",
-                            lineNumber: 70,
+                            lineNumber: 82,
                             columnNumber: 11
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/App.js",
-                    lineNumber: 67,
+                    lineNumber: 79,
                     columnNumber: 9
                 }, undefined),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(UserBox, {
@@ -27259,39 +27269,47 @@ const App = ()=>{
                             children: "Users"
                         }, void 0, false, {
                             fileName: "src/App.js",
-                            lineNumber: 80,
+                            lineNumber: 92,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("ul", {}, void 0, false, {
+                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("ul", {
+                                children: users && users.map((user)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
+                                        children: user.name
+                                    }, user.id, false, {
+                                        fileName: "src/App.js",
+                                        lineNumber: 95,
+                                        columnNumber: 45
+                                    }, undefined))
+                            }, void 0, false, {
                                 fileName: "src/App.js",
-                                lineNumber: 82,
+                                lineNumber: 94,
                                 columnNumber: 13
                             }, undefined)
                         }, void 0, false, {
                             fileName: "src/App.js",
-                            lineNumber: 81,
+                            lineNumber: 93,
                             columnNumber: 11
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/App.js",
-                    lineNumber: 79,
+                    lineNumber: 91,
                     columnNumber: 9
                 }, undefined)
             ]
         }, void 0, true, {
             fileName: "src/App.js",
-            lineNumber: 66,
+            lineNumber: 78,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
         fileName: "src/App.js",
-        lineNumber: 65,
+        lineNumber: 77,
         columnNumber: 5
     }, undefined);
 };
-_s(App, "EoNXVB1pIU+MDRp7B7sDdcyb9+o=");
+_s(App, "P6rm3X49ZXIIG10kx+Y0tS5TMbg=");
 _c4 = App;
 exports.default = App;
 var _c, _c1, _c2, _c3, _c4;

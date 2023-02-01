@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import styled from "styled-components";
 
-const socket = io("ws://localhost:5000");
+const username = prompt("What is your username");
 
-// const username = prompt("What is your username");
+const socket = io("ws://localhost:5000");
 
 const StyledDiv = styled.div`
   display: flex;
@@ -46,18 +46,30 @@ const UserBox = styled.div`
 
 const Messages = styled.div`
   background-color: lightgrey;
-  width: 100%;
+  width: 100%;bob
+
   height: 400px;
 `;
 
 const App = () => {
-  [messages, SetMessages] = useState([]);
-  [message, setMessage] = useState("");
-  [users, setUsers] = useState([]);
+  const [messages, SetMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     socket.on("connect", () => {
       console.log("connected", socket.id);
+      socket.emit("username-provided", username);
+    });
+
+    socket.on("connected", (users) => {
+      setUsers(users);
+    });
+
+    socket.on("disconnected", (id) => {
+      setUsers((users) => {
+        return users.filter((user) => user.id !== id);
+      });
     });
   }, []);
 
@@ -79,7 +91,9 @@ const App = () => {
         <UserBox>
           <h1>Users</h1>
           <div>
-            <ul></ul>
+            <ul>
+              {users && users.map((user) => <li key={user.id}>{user.name}</li>)}
+            </ul>
           </div>
         </UserBox>
       </div>

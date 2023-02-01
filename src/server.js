@@ -10,8 +10,23 @@ const io = new Server(httpServer, {
   },
 });
 
+const users = {};
+
 io.on("connection", (socket) => {
-  console.log("user connected", socket.id);
+  socket.on("username-provided", (username) => {
+    const user = {
+      id: socket.id,
+      name: username,
+    };
+    users[socket.id] = user;
+    // io.emit("connected", user);
+    io.emit("connected", Object.values(users));
+  });
+
+  socket.on("disconnect", () => {
+    delete users[socket.id];
+    io.emit("disconnected", socket.id);
+  });
 });
 
 httpServer.listen(5000);
